@@ -8,6 +8,7 @@ import {
   Facebook,
   MessageCircle,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -154,6 +155,10 @@ export default function Footer() {
             <span>CREA Registrada</span>
             <span>·</span>
             <span>Garantia Total</span>
+            <span>·</span>
+            <Link to="/admin/login" className="hover:text-gray-400 transition-colors">
+              Área Restrita
+            </Link>
           </p>
         </div>
       </div>
