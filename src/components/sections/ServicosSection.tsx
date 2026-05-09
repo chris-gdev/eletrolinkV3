@@ -12,7 +12,8 @@ type Servico = {
 }
 
 function DynamicIcon({ name, size, className }: { name: string; size: number; className?: string }) {
-  const Icon = (Icons as Record<string, Icons.LucideIcon>)[name]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Icon = (Icons as any)[name] as Icons.LucideIcon | undefined
   if (!Icon) return <Icons.Zap size={size} className={className} />
   return <Icon size={size} className={className} />
 }
