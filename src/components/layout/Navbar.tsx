@@ -60,9 +60,6 @@ export default function Navbar() {
               <Phone size={13} />
               <span>(11) 94764-1802</span>
             </a>
-            <a href="/admin/login" className="bg-gradient-to-r from-primary-500 to-gold-500 hover:opacity-90 text-white font-semibold text-sm py-2 px-5 rounded-lg transition-all">
-              Entrar
-            </a>
           </div>
 
           {/* Mobile toggle */}
