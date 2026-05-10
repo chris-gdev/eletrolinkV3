@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Search, Filter, Eye, Trash2, AlertTriangle, ChevronDown } from 'lucide-react'
+import { Search, Filter, Eye, Trash2, AlertTriangle, ChevronDown, Save } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { supabase } from '../../lib/supabase'
 import { OrcamentoRequest, StatusOrcamento } from '../../types'
+import RichTextEditor from '../../components/admin/RichTextEditor'
 
 const statusConfig: Record<StatusOrcamento, { label: string; color: string }> = {
   pendente: { label: 'Pendente', color: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' },
@@ -18,6 +19,8 @@ export default function AdminOrcamentos() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [selected, setSelected] = useState<OrcamentoRequest | null>(null)
+  const [notas, setNotas] = useState('')
+  const [savingNotas, setSavingNotas] = useState(false)
 
   useEffect(() => { fetchOrcamentos() }, [])
 
@@ -31,6 +34,20 @@ export default function AdminOrcamentos() {
     if (statusFilter !== 'all') result = result.filter(o => o.status === statusFilter)
     setFiltered(result)
   }, [search, statusFilter, orcamentos])
+
+  function selectOrcamento(o: OrcamentoRequest) {
+    setSelected(o)
+    setNotas((o as any).notas || '')
+  }
+
+  async function saveNotas() {
+    if (!selected) return
+    setSavingNotas(true)
+    const { error } = await supabase.from('orcamentos').update({ notas }).eq('id', selected.id)
+    if (error) toast.error('Erro ao salvar notas.')
+    else toast.success('Notas salvas.')
+    setSavingNotas(false)
+  }
 
   async function fetchOrcamentos() {
     const { data, error } = await supabase.from('orcamentos').select('*').order('created_at', { ascending: false })
@@ -112,7 +129,7 @@ export default function AdminOrcamentos() {
                       <tr
                         key={o.id}
                         className={`border-b border-dark-600 hover:bg-dark-700/50 transition-colors cursor-pointer ${selected?.id === o.id ? 'bg-dark-700' : ''}`}
-                        onClick={() => setSelected(o)}
+                        onClick={() => selectOrcamento(o)}
                       >
                         <td className="p-4 text-white font-body text-sm">{o.nome}</td>
                         <td className="p-4 text-gray-400 font-body text-sm max-w-[140px] truncate">{o.tipo_servico}</td>
@@ -132,7 +149,7 @@ export default function AdminOrcamentos() {
                         </td>
                         <td className="p-4">
                           <div className="flex gap-2">
-                            <button onClick={e => { e.stopPropagation(); setSelected(o) }} className="text-gray-400 hover:text-white transition-colors">
+                            <button onClick={e => { e.stopPropagation(); selectOrcamento(o) }} className="text-gray-400 hover:text-white transition-colors">
                               <Eye size={15} />
                             </button>
                             <button onClick={e => { e.stopPropagation(); deleteOrcamento(o.id) }} className="text-gray-400 hover:text-red-400 transition-colors">
@@ -176,6 +193,19 @@ export default function AdminOrcamentos() {
                   {selected.descricao}
                 </div>
               </div>
+              <div>
+                <div className="text-gray-500 font-body text-xs uppercase tracking-wider mb-2">Notas Internas</div>
+                <RichTextEditor value={notas} onChange={setNotas} />
+                <button
+                  onClick={saveNotas}
+                  disabled={savingNotas}
+                  className="mt-2 btn-primary flex items-center gap-2 text-xs py-1.5 px-4 disabled:opacity-60"
+                >
+                  <Save size={12} />
+                  {savingNotas ? 'Salvando...' : 'Salvar Notas'}
+                </button>
+              </div>
+
               <div>
                 <div className="text-gray-500 font-body text-xs uppercase tracking-wider mb-2">Atualizar Status</div>
                 <div className="grid grid-cols-2 gap-2">

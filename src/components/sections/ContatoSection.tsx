@@ -73,7 +73,7 @@ export default function ContatoSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
           {[
             { icon: Phone, titulo: 'Telefone', valor: config.telefone, sub: 'Atendimento 24 horas', href: `tel:${config.telefone.replace(/\D/g, '')}` },
-            { icon: Mail, titulo: 'Email', valor: config.email, sub: 'Resposta em até 24 horas', href: `mailto:${config.email}` },
+            { icon: Mail, titulo: 'Email', valor: config.email, sub: 'Resposta em até 24 horas', href: `mailto:${config.email}?subject=Contato via site&body=Olá, gostaria de entrar em contato.` },
             { icon: Clock, titulo: 'Horário', valor: config.horario, sub: 'Emergências: 24h', href: undefined },
           ].map(item => (
             <div key={item.titulo} className="card-light p-6 text-center">
