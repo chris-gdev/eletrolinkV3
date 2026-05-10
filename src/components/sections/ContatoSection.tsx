@@ -73,23 +73,30 @@ export default function ContatoSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
           {[
             { icon: Phone, titulo: 'Telefone', valor: config.telefone, sub: 'Atendimento 24 horas', href: `tel:${config.telefone.replace(/\D/g, '')}` },
-            { icon: Mail, titulo: 'Email', valor: config.email, sub: 'Resposta em até 24 horas', href: `mailto:${config.email}?subject=Contato via site&body=Olá, gostaria de entrar em contato.` },
+            { icon: Mail, titulo: 'Email', valor: config.email, sub: 'Clique para enviar um e-mail', href: `mailto:${config.email}?subject=Contato via site&body=Olá, gostaria de entrar em contato.` },
             { icon: Clock, titulo: 'Horário', valor: config.horario, sub: 'Emergências: 24h', href: undefined },
-          ].map(item => (
-            <div key={item.titulo} className="card-light p-6 text-center">
-              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-                style={{ background: 'linear-gradient(135deg, #1a56db, #d4a017)' }}>
-                <item.icon size={22} className="text-white" />
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">{item.titulo}</h4>
-              {item.href ? (
-                <a href={item.href} className="text-blue-600 hover:text-blue-700 font-medium block">{item.valor}</a>
-              ) : (
+          ].map(item => {
+            const content = (
+              <>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
+                  style={{ background: 'linear-gradient(135deg, #1a56db, #d4a017)' }}>
+                  <item.icon size={22} className="text-white" />
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-2">{item.titulo}</h4>
                 <p className="text-blue-600 font-medium">{item.valor}</p>
-              )}
-              <p className="text-gray-400 text-sm mt-1">{item.sub}</p>
-            </div>
-          ))}
+                <p className="text-gray-400 text-sm mt-1">{item.sub}</p>
+              </>
+            )
+            return item.href ? (
+              <a key={item.titulo} href={item.href} className="card-light p-6 text-center block hover:shadow-md transition-shadow">
+                {content}
+              </a>
+            ) : (
+              <div key={item.titulo} className="card-light p-6 text-center">
+                {content}
+              </div>
+            )
+          })}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
