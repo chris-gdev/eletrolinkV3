@@ -5,6 +5,7 @@ import ServicosSection from '../components/sections/ServicosSection'
 import SobreSection from '../components/sections/SobreSection'
 import OrcamentoSection from '../components/sections/OrcamentoSection'
 import ContatoSection from '../components/sections/ContatoSection'
+import DepoimentosSection from '../components/sections/DepoimentosSection'
 import { MessageCircle } from 'lucide-react'
 
 export default function HomePage() {
@@ -14,6 +15,7 @@ export default function HomePage() {
       <HeroSection />
       <ServicosSection />
       <SobreSection />
+      <DepoimentosSection />
       <ContatoSection />
       <OrcamentoSection />
       <Footer />
