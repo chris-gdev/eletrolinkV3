@@ -45,6 +45,13 @@ export default function ContatoSection() {
     try {
       const { error } = await supabase.from('contatos').insert([{ ...form, lida: false }])
       if (error) throw error
+
+      await fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
       setStatus('success')
       setForm(empty)
       setErrors({})
