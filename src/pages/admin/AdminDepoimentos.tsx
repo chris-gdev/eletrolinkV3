@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, Pencil, Trash2, Check, Star } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { supabase } from '../../lib/supabase'
 import { Depoimento } from '../../types'
 
@@ -11,35 +12,49 @@ export default function AdminDepoimentos() {
   const [editing, setEditing] = useState<Depoimento | null>(null)
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState(emptyDep)
+  const [salvando, setSalvando] = useState(false)
 
   useEffect(() => { fetchDepoimentos() }, [])
 
   async function fetchDepoimentos() {
-    const { data } = await supabase.from('depoimentos').select('*').order('created_at', { ascending: false })
+    const { data, error } = await supabase.from('depoimentos').select('*').order('created_at', { ascending: false })
+    if (error) toast.error('Erro ao carregar depoimentos.')
     setDepoimentos(data || [])
     setLoading(false)
   }
 
   async function save() {
-    if (editing) {
-      await supabase.from('depoimentos').update(form).eq('id', editing.id)
-    } else {
-      await supabase.from('depoimentos').insert([form])
+    if (!form.nome.trim() || !form.texto.trim()) {
+      toast.error('Preencha o nome e o texto do depoimento.')
+      return
     }
+    setSalvando(true)
+    const { error } = editing
+      ? await supabase.from('depoimentos').update(form).eq('id', editing.id)
+      : await supabase.from('depoimentos').insert([form])
+
+    if (error) { toast.error('Erro ao salvar depoimento.'); setSalvando(false); return }
+
+    toast.success(editing ? 'Depoimento atualizado.' : 'Depoimento criado.')
     setEditing(null)
     setCreating(false)
+    setSalvando(false)
     fetchDepoimentos()
   }
 
   async function toggleAtivo(id: string, ativo: boolean) {
-    await supabase.from('depoimentos').update({ ativo: !ativo }).eq('id', id)
+    const { error } = await supabase.from('depoimentos').update({ ativo: !ativo }).eq('id', id)
+    if (error) { toast.error('Erro ao atualizar visibilidade.'); return }
     setDepoimentos(prev => prev.map(d => d.id === id ? { ...d, ativo: !d.ativo } : d))
+    toast.success(!ativo ? 'Depoimento visível no site.' : 'Depoimento ocultado.')
   }
 
   async function del(id: string) {
     if (!confirm('Excluir este depoimento?')) return
-    await supabase.from('depoimentos').delete().eq('id', id)
+    const { error } = await supabase.from('depoimentos').delete().eq('id', id)
+    if (error) { toast.error('Erro ao excluir depoimento.'); return }
     setDepoimentos(prev => prev.filter(d => d.id !== id))
+    toast.success('Depoimento excluído.')
   }
 
   function startEdit(d: Depoimento) {
@@ -92,8 +107,9 @@ export default function AdminDepoimentos() {
               </div>
             </div>
             <div className="flex gap-3">
-              <button onClick={save} className="btn-primary flex items-center gap-2 text-sm py-2 px-5">
-                <Check size={14} /> Salvar
+              <button onClick={save} disabled={salvando} className="btn-primary flex items-center gap-2 text-sm py-2 px-5 disabled:opacity-60">
+                <Check size={14} />
+                {salvando ? 'Salvando...' : 'Salvar'}
               </button>
               <button onClick={() => { setEditing(null); setCreating(false) }} className="btn-outline text-sm py-2 px-5">
                 Cancelar
@@ -117,7 +133,7 @@ export default function AdminDepoimentos() {
                   {d.servico && <div className="text-primary-500 text-xs font-body mt-0.5">{d.servico}</div>}
                 </div>
                 <div className="flex gap-1 shrink-0">
-                  <button onClick={() => toggleAtivo(d.id, d.ativo)} className={`p-1 transition-colors ${d.ativo ? 'text-green-400' : 'text-dark-400 hover:text-green-400'}`}>
+                  <button onClick={() => toggleAtivo(d.id, d.ativo)} className={`p-1 transition-colors ${d.ativo ? 'text-green-400' : 'text-dark-400 hover:text-green-400'}`} title={d.ativo ? 'Ocultar' : 'Exibir'}>
                     <Check size={14} />
                   </button>
                   <button onClick={() => startEdit(d)} className="p-1 text-gray-400 hover:text-white transition-colors">

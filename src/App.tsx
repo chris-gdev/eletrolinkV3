@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 import { useAuth } from './hooks/useAuth'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
@@ -30,6 +31,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" toastOptions={{ style: { background: '#1c1c24', color: '#fff', border: '1px solid #2a2a35' } }} />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin/login" element={<LoginPage />} />
