@@ -190,30 +190,30 @@ export default function AdminServicos() {
         ) : (
           <div className="divide-y divide-dark-600">
             {servicos.map(s => (
-              <div key={s.id} className="p-4 flex items-start gap-4">
+              <div key={s.id} className="p-4 flex items-start gap-3">
                 <GripVertical size={16} className="text-dark-400 mt-1 cursor-grab shrink-0" />
                 <div className="w-9 h-9 rounded-lg bg-primary-500/10 border border-primary-500/20 flex items-center justify-center shrink-0">
                   <DynamicIcon name={s.icone} size={16} className="text-primary-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="font-display font-semibold text-white text-sm uppercase tracking-wide">{s.titulo}</span>
-                    <span className={`text-xs font-body px-2 py-0.5 border rounded-sm ${s.ativo ? 'text-green-400 bg-green-500/10 border-green-500/20' : 'text-gray-500 bg-dark-500 border-dark-400'}`}>
-                      {s.ativo ? 'Ativo' : 'Inativo'}
-                    </span>
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <span className="font-display font-semibold text-white text-sm uppercase tracking-wide leading-snug">{s.titulo}</span>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <span className={`text-xs font-body px-2 py-0.5 border rounded-sm whitespace-nowrap ${s.ativo ? 'text-green-400 bg-green-500/10 border-green-500/20' : 'text-gray-500 bg-dark-500 border-dark-400'}`}>
+                        {s.ativo ? 'Ativo' : 'Inativo'}
+                      </span>
+                      <button onClick={() => toggleAtivo(s.id, s.ativo)} className={`p-1.5 transition-colors ${s.ativo ? 'text-green-400 hover:text-gray-400' : 'text-gray-500 hover:text-green-400'}`} title={s.ativo ? 'Desativar' : 'Ativar'}>
+                        <Check size={14} />
+                      </button>
+                      <button onClick={() => startEdit(s)} className="p-1.5 text-gray-400 hover:text-white transition-colors">
+                        <Pencil size={14} />
+                      </button>
+                      <button onClick={() => deleteServico(s.id)} className="p-1.5 text-gray-400 hover:text-red-400 transition-colors">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
                   </div>
-                  <div className="text-gray-400 font-body text-sm prose prose-sm prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: s.descricao }} />
-                </div>
-                <div className="flex gap-2 shrink-0">
-                  <button onClick={() => toggleAtivo(s.id, s.ativo)} className={`p-1.5 transition-colors ${s.ativo ? 'text-green-400 hover:text-gray-400' : 'text-gray-500 hover:text-green-400'}`} title={s.ativo ? 'Desativar' : 'Ativar'}>
-                    <Check size={15} />
-                  </button>
-                  <button onClick={() => startEdit(s)} className="p-1.5 text-gray-400 hover:text-white transition-colors">
-                    <Pencil size={15} />
-                  </button>
-                  <button onClick={() => deleteServico(s.id)} className="p-1.5 text-gray-400 hover:text-red-400 transition-colors">
-                    <Trash2 size={15} />
-                  </button>
+                  <div className="text-gray-400 font-body text-sm prose prose-sm prose-invert max-w-none line-clamp-3" dangerouslySetInnerHTML={{ __html: s.descricao }} />
                 </div>
               </div>
             ))}

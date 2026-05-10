@@ -72,7 +72,8 @@ export default function AdminDepoimentos() {
         </div>
         <button onClick={() => { setCreating(true); setEditing(null); setForm(emptyDep) }} className="btn-primary flex items-center gap-2 text-sm py-2 px-4 shrink-0">
           <Plus size={16} />
-          Novo Depoimento
+          <span className="hidden sm:inline">Novo Depoimento</span>
+          <span className="sm:hidden">Novo</span>
         </button>
       </div>
 
