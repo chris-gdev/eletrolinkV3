@@ -20,7 +20,7 @@
 
   body.admin-body {
     background-color: #0f0f14;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 }
 
