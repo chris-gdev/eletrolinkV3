@@ -13,14 +13,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let text = ''
 
   if (tipo === 'orcamento') {
+    const isEmergencia = data.urgencia === 'emergencia'
+
+    if (isEmergencia) {
+      const alerta = `🚨🚨🚨 *EMERGÊNCIA ELÉTRICA* 🚨🚨🚨\n\nATENDIMENTO IMEDIATO NECESSÁRIO!\n\n👤 *${data.nome}*\n📱 *${data.telefone}*`
+      const callUrl = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(alerta)}&apikey=${apikey}`
+      await fetch(callUrl)
+      await new Promise(r => setTimeout(r, 2000))
+    }
+
     text = [
-      `📋 *Novo orçamento solicitado!*`,
+      isEmergencia
+        ? `🚨 *EMERGÊNCIA — ORÇAMENTO URGENTE*`
+        : `📋 *Novo orçamento solicitado!*`,
       ``,
       `👤 *Nome:* ${data.nome}`,
       `📱 *Telefone:* ${data.telefone}`,
       data.email ? `📧 *Email:* ${data.email}` : null,
       `🔧 *Serviço:* ${data.tipo_servico}`,
-      `⚡ *Urgência:* ${data.urgencia}`,
+      `⚡ *Urgência:* ${isEmergencia ? '🔴 EMERGÊNCIA' : data.urgencia}`,
       data.endereco ? `📍 *Endereço:* ${data.endereco}` : null,
       ``,
       `💬 *Descrição:*`,
