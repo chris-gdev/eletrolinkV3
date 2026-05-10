@@ -56,6 +56,13 @@ export default function OrcamentoSection() {
     try {
       const { error } = await supabase.from('orcamentos').insert([{ ...form, status: 'pendente' }])
       if (error) throw error
+
+      await fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo: 'orcamento', ...form }),
+      })
+
       setStatus('success')
       setForm(empty)
       setErrors({})
