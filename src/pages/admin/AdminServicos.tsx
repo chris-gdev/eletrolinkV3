@@ -201,7 +201,7 @@ export default function AdminServicos() {
                       {s.ativo ? 'Ativo' : 'Inativo'}
                     </span>
                   </div>
-                  <p className="text-gray-400 font-body text-sm">{s.descricao}</p>
+                  <div className="text-gray-400 font-body text-sm prose prose-sm prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: s.descricao }} />
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <button onClick={() => toggleAtivo(s.id, s.ativo)} className={`p-1.5 transition-colors ${s.ativo ? 'text-green-400 hover:text-gray-400' : 'text-gray-500 hover:text-green-400'}`} title={s.ativo ? 'Desativar' : 'Ativar'}>
