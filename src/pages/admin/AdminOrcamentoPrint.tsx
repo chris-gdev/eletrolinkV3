@@ -39,6 +39,7 @@ export default function AdminOrcamentoPrint() {
   const navigate = useNavigate()
   const [orc, setOrc] = useState<OrcamentoFormal | null>(null)
   const [itens, setItens] = useState<ItemOrcamento[]>([])
+  const [fotos, setFotos] = useState<{ id: string; url: string; legenda: string }[]>([])
   const [config, setConfig] = useState<Config>(defaultConfig)
   const [loading, setLoading] = useState(true)
 
@@ -51,14 +52,14 @@ export default function AdminOrcamentoPrint() {
 
       if (!orcData) { navigate('/admin/orcamentos'); return }
 
-      const { data: itensData } = await supabase
-        .from('orcamento_itens')
-        .select('*')
-        .eq('orcamento_id', id)
-        .order('ordem', { ascending: true })
+      const [{ data: itensData }, { data: fotosData }] = await Promise.all([
+        supabase.from('orcamento_itens').select('*').eq('orcamento_id', id).order('ordem', { ascending: true }),
+        supabase.from('orcamento_fotos').select('*').eq('orcamento_id', id).order('created_at'),
+      ])
 
       setOrc(orcData as OrcamentoFormal)
       setItens((itensData || []) as ItemOrcamento[])
+      setFotos((fotosData || []) as { id: string; url: string; legenda: string }[])
       if (configData) setConfig(configData as Config)
       setLoading(false)
     }
@@ -263,6 +264,31 @@ export default function AdminOrcamentoPrint() {
               Observações
             </div>
             <div style={{ fontSize: 12, color: '#374151', lineHeight: 1.7, whiteSpace: 'pre-line' }}>{orc.observacoes}</div>
+          </div>
+        )}
+
+        {/* FOTOS */}
+        {fotos.length > 0 && (
+          <div style={{ marginBottom: 32 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>
+              Registro Fotográfico
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+              {fotos.map(foto => (
+                <div key={foto.id} style={{ borderRadius: 6, overflow: 'hidden', border: '1px solid #e5e7eb' }}>
+                  <img
+                    src={foto.url}
+                    alt={foto.legenda || 'Foto do serviço'}
+                    style={{ width: '100%', height: 160, objectFit: 'cover', display: 'block' }}
+                  />
+                  {foto.legenda && (
+                    <div style={{ padding: '4px 8px', fontSize: 10, color: '#6b7280', background: '#f9fafb' }}>
+                      {foto.legenda}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
