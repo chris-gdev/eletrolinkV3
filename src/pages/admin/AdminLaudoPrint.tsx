@@ -455,6 +455,11 @@ export default function AdminLaudoPrint() {
           body { margin: 0; }
           #doc { max-width: 100% !important; }
         }
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+        }
       `}</style>
     </>
   )
