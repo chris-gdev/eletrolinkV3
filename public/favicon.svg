@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1c1c28"/>
+      <stop offset="100%" stop-color="#0f0f18"/>
+    </linearGradient>
+    <linearGradient id="bolt" x1="10" y1="2" x2="22" y2="30" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <!-- Fundo arredondado -->
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <!-- Raio elétrico -->
+  <path d="M18.5 3L9 17.5h7L12.5 29l11.5-15h-7L18.5 3z" fill="url(#bolt)"/>
+</svg>
