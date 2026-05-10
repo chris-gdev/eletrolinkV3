@@ -1,6 +1,9 @@
 import { ArrowRight, Phone, Shield, Clock, Star } from "lucide-react";
+import { useConfig } from "../../hooks/useConfig";
 
 export default function HeroSection() {
+  const config = useConfig()
+
   return (
     <section
       id="inicio"
@@ -40,11 +43,11 @@ export default function HeroSection() {
                 <ArrowRight size={18} />
               </a>
               <a
-                href="tel:+5511947641802"
+                href={`tel:${config.telefone.replace(/\D/g, '')}`}
                 className="flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-blue-800 font-semibold px-8 py-4 rounded-lg transition-all duration-200"
               >
                 <Phone size={18} />
-                (11) 94764-1802
+                {config.telefone}
               </a>
             </div>
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/20">

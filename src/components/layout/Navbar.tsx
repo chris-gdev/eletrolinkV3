@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Zap, Menu, X, Phone } from 'lucide-react'
+import { useConfig } from '../../hooks/useConfig'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const config = useConfig()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
@@ -54,11 +56,11 @@ export default function Navbar() {
           {/* CTA */}
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="tel:+5511947641802"
+              href={`tel:${config.telefone.replace(/\D/g, '')}`}
               className="flex items-center gap-1.5 text-gray-300 hover:text-white transition-colors text-sm"
             >
               <Phone size={13} />
-              <span>(11) 94764-1802</span>
+              <span>{config.telefone}</span>
             </a>
           </div>
 
