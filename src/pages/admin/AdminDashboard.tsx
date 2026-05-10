@@ -66,8 +66,8 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="font-display font-bold text-3xl text-white uppercase tracking-wider">Dashboard</h1>
+      <div className="mb-6">
+        <h1 className="font-display font-bold text-2xl lg:text-3xl text-white uppercase tracking-wider">Dashboard</h1>
         <p className="text-gray-500 font-body text-sm mt-1">Visão geral do sistema</p>
       </div>
 
@@ -89,7 +89,7 @@ export default function AdminDashboard() {
                 <div className={`inline-flex p-2.5 border rounded-sm mb-3 ${card.bg}`}>
                   <card.icon size={18} className={card.color} />
                 </div>
-                <div className="font-display font-bold text-3xl text-white mb-1">
+                <div className="font-display font-bold text-2xl lg:text-3xl text-white mb-1">
                   {card.value}
                 </div>
                 <div className="text-gray-500 font-body text-xs uppercase tracking-wider">{card.label}</div>

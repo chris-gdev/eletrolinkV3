@@ -100,14 +100,15 @@ export default function AdminServicos() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="font-display font-bold text-3xl text-white uppercase tracking-wider">Serviços</h1>
+          <h1 className="font-display font-bold text-2xl lg:text-3xl text-white uppercase tracking-wider">Serviços</h1>
           <p className="text-gray-500 font-body text-sm mt-1">{servicos.length} serviços cadastrados</p>
         </div>
-        <button onClick={startCreate} className="btn-primary flex items-center gap-2 text-sm py-2 px-5">
+        <button onClick={startCreate} className="btn-primary flex items-center gap-2 text-sm py-2 px-4 shrink-0">
           <Plus size={16} />
-          Novo Serviço
+          <span className="hidden sm:inline">Novo Serviço</span>
+          <span className="sm:hidden">Novo</span>
         </button>
       </div>
 

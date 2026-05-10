@@ -65,12 +65,12 @@ export default function AdminDepoimentos() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="font-display font-bold text-3xl text-white uppercase tracking-wider">Depoimentos</h1>
+          <h1 className="font-display font-bold text-2xl lg:text-3xl text-white uppercase tracking-wider">Depoimentos</h1>
           <p className="text-gray-500 font-body text-sm mt-1">{depoimentos.length} depoimentos</p>
         </div>
-        <button onClick={() => { setCreating(true); setEditing(null); setForm(emptyDep) }} className="btn-primary flex items-center gap-2 text-sm py-2 px-5">
+        <button onClick={() => { setCreating(true); setEditing(null); setForm(emptyDep) }} className="btn-primary flex items-center gap-2 text-sm py-2 px-4 shrink-0">
           <Plus size={16} />
           Novo Depoimento
         </button>

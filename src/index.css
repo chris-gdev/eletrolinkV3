@@ -17,6 +17,11 @@
     color: #111827;
     overflow-x: hidden;
   }
+
+  body.admin-body {
+    background-color: #0f0f14;
+    overflow: hidden;
+  }
 }
 
 @layer components {

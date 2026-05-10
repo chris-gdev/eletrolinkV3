@@ -56,8 +56,8 @@ export default function AdminMensagens() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="font-display font-bold text-3xl text-white uppercase tracking-wider">Mensagens</h1>
+      <div className="mb-6">
+        <h1 className="font-display font-bold text-2xl lg:text-3xl text-white uppercase tracking-wider">Mensagens</h1>
         <p className="text-gray-500 font-body text-sm mt-1">
           {mensagens.length} mensagens · <span className="text-primary-400">{naoLidas} não lidas</span>
         </p>
@@ -70,7 +70,7 @@ export default function AdminMensagens() {
         </div>
       </div>
 
-      <div className={`${selected ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : ''}`}>
+      <div className={`${selected ? 'grid grid-cols-1 xl:grid-cols-2 gap-6' : ''}`}>
         <div className="card-dark overflow-hidden">
           {loading ? (
             <div className="p-8 text-center text-gray-500 font-body">Carregando...</div>
