@@ -13,6 +13,9 @@ import AdminMensagens from './pages/admin/AdminMensagens'
 import AdminServicos from './pages/admin/AdminServicos'
 import AdminDepoimentos from './pages/admin/AdminDepoimentos'
 import AdminConfiguracoes from './pages/admin/AdminConfiguracoes'
+import AdminLaudos from './pages/admin/AdminLaudos'
+import AdminLaudoForm from './pages/admin/AdminLaudoForm'
+import AdminLaudoPrint from './pages/admin/AdminLaudoPrint'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -39,12 +42,20 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/admin/login" element={<LoginPage />} />
 
-        {/* Página de impressão — fora do AdminLayout para layout limpo */}
+        {/* Páginas de impressão — fora do AdminLayout para layout limpo */}
         <Route
           path="/admin/orcamentos/:id/imprimir"
           element={
             <ProtectedRoute>
               <AdminOrcamentoPrint />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/laudos/:id/imprimir"
+          element={
+            <ProtectedRoute>
+              <AdminLaudoPrint />
             </ProtectedRoute>
           }
         />
@@ -63,6 +74,11 @@ export default function App() {
           <Route path="orcamentos" element={<AdminOrcamentos />} />
           <Route path="orcamentos/novo" element={<AdminOrcamentoForm />} />
           <Route path="orcamentos/:id" element={<AdminOrcamentoForm />} />
+
+          {/* Laudos técnicos */}
+          <Route path="laudos" element={<AdminLaudos />} />
+          <Route path="laudos/novo" element={<AdminLaudoForm />} />
+          <Route path="laudos/:id" element={<AdminLaudoForm />} />
 
           {/* Solicitações do site (formulário público) */}
           <Route path="solicitacoes" element={<AdminSolicitacoes />} />

@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
   Zap, LayoutDashboard, FileText, MessageSquare, Settings,
-  Star, LogOut, Menu, X, ChevronRight, ClipboardList, Wrench
+  Star, LogOut, Menu, X, ChevronRight, ClipboardList, Wrench, ShieldCheck
 } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/orcamentos', label: 'Orçamentos', icon: FileText, end: false },
+  { to: '/admin/laudos', label: 'Laudos', icon: ShieldCheck, end: false },
   { to: '/admin/solicitacoes', label: 'Solicitações', icon: ClipboardList, end: false },
   { to: '/admin/mensagens', label: 'Mensagens', icon: MessageSquare, end: false },
   { to: '/admin/servicos', label: 'Serviços', icon: Wrench, end: false },

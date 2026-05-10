@@ -62,6 +62,71 @@ export interface ItemOrcamento {
   ordem: number
 }
 
+export type TipoLaudo =
+  | 'manutencao'
+  | 'projeto'
+  | 'vistoria'
+  | 'conformidade'
+  | 'instalacoes'
+
+export type StatusLaudo = 'rascunho' | 'emitido' | 'entregue' | 'arquivado'
+
+export type ConformidadeLaudo = 'conforme' | 'nao_conforme' | 'com_ressalvas'
+
+export type ResultadoItemLaudo = 'conforme' | 'nao_conforme' | 'nao_aplicavel'
+
+export interface LaudoItem {
+  id: string
+  laudo_id: string
+  descricao: string
+  resultado: ResultadoItemLaudo
+  observacao: string
+  ordem: number
+}
+
+export interface Laudo {
+  id: string
+  numero: number
+  created_at: string
+  updated_at: string
+  // Tipo e status
+  tipo: TipoLaudo
+  status: StatusLaudo
+  // Cliente
+  cliente_nome: string
+  cliente_cpf_cnpj: string
+  cliente_telefone: string
+  cliente_email: string
+  cliente_endereco: string
+  cliente_cidade: string
+  cliente_estado: string
+  // Local e datas
+  local_inspecao: string
+  data_inspecao: string
+  data_emissao: string
+  data_validade: string
+  // Responsável técnico
+  responsavel_tecnico: string
+  crea_numero: string
+  art_numero: string
+  // Conteúdo técnico
+  objetivo: string
+  metodologia: string
+  descricao_instalacao: string
+  condicoes_encontradas: string
+  nao_conformidades: string
+  recomendacoes: string
+  conclusao: string
+  // Resultado
+  conformidade: ConformidadeLaudo
+  // Extras
+  normas_aplicadas: string
+  observacoes: string
+  notas_internas: string
+  // Join
+  itens?: LaudoItem[]
+}
+
 export interface OrcamentoFormal {
   id: string
   numero: number
