@@ -41,23 +41,37 @@ export default function AdminServicos() {
   const [editing, setEditing] = useState<Servico | null>(null)
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState(emptyServico)
+  const [erro, setErro] = useState<string | null>(null)
+  const [salvando, setSalvando] = useState(false)
 
   useEffect(() => { fetchServicos() }, [])
 
   async function fetchServicos() {
-    const { data } = await supabase.from('servicos').select('*').order('ordem')
+    const { data, error } = await supabase.from('servicos').select('*').order('ordem')
+    if (error) console.error('Erro ao buscar serviços:', error)
     setServicos(data || [])
     setLoading(false)
   }
 
   async function saveServico() {
-    if (editing) {
-      await supabase.from('servicos').update(form).eq('id', editing.id)
-    } else {
-      await supabase.from('servicos').insert([form])
+    if (!form.titulo.trim() || !form.descricao.trim()) {
+      setErro('Preencha o título e a descrição.')
+      return
+    }
+    setSalvando(true)
+    setErro(null)
+    const { error } = editing
+      ? await supabase.from('servicos').update(form).eq('id', editing.id)
+      : await supabase.from('servicos').insert([form])
+
+    if (error) {
+      setErro(`Erro ao salvar: ${error.message}`)
+      setSalvando(false)
+      return
     }
     setEditing(null)
     setCreating(false)
+    setSalvando(false)
     fetchServicos()
   }
 
@@ -149,12 +163,17 @@ export default function AdminServicos() {
                 <span className="text-gray-300 font-body text-sm">Ativo no site</span>
               </label>
             </div>
+            {erro && (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-2.5 text-red-400 text-sm font-body">
+                {erro}
+              </div>
+            )}
             <div className="flex gap-3">
-              <button onClick={saveServico} className="btn-primary flex items-center gap-2 text-sm py-2 px-5">
+              <button onClick={saveServico} disabled={salvando} className="btn-primary flex items-center gap-2 text-sm py-2 px-5 disabled:opacity-60">
                 <Check size={14} />
-                Salvar
+                {salvando ? 'Salvando...' : 'Salvar'}
               </button>
-              <button onClick={() => { setEditing(null); setCreating(false) }} className="btn-outline text-sm py-2 px-5">
+              <button onClick={() => { setEditing(null); setCreating(false); setErro(null) }} className="btn-outline text-sm py-2 px-5">
                 Cancelar
               </button>
             </div>
