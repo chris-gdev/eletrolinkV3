@@ -1,7 +1,36 @@
 import { useEffect, useState } from 'react'
 import { Plus, Pencil, Trash2, GripVertical, Check, X } from 'lucide-react'
+import * as Icons from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { Servico } from '../../types'
+
+const ICON_OPTIONS = [
+  { name: 'Zap', label: 'Elétrica' },
+  { name: 'Home', label: 'Residencial' },
+  { name: 'Building2', label: 'Comercial' },
+  { name: 'Sun', label: 'Solar' },
+  { name: 'Wrench', label: 'Manutenção' },
+  { name: 'AirVent', label: 'Ar Condicionado' },
+  { name: 'ShieldCheck', label: 'Segurança' },
+  { name: 'Lightbulb', label: 'Iluminação' },
+  { name: 'Cable', label: 'Cabeamento' },
+  { name: 'Gauge', label: 'Medição' },
+  { name: 'Flame', label: 'Emergência' },
+  { name: 'Settings', label: 'Configuração' },
+  { name: 'CircuitBoard', label: 'Quadro Elétrico' },
+  { name: 'Wifi', label: 'Rede' },
+  { name: 'Battery', label: 'Energia' },
+  { name: 'Thermometer', label: 'Temperatura' },
+  { name: 'Camera', label: 'CFTV' },
+  { name: 'Bell', label: 'Alarme' },
+]
+
+function DynamicIcon({ name, size, className }: { name: string; size: number; className?: string }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Icon = (Icons as any)[name] as Icons.LucideIcon | undefined
+  if (!Icon) return <Icons.Zap size={size} className={className} />
+  return <Icon size={size} className={className} />
+}
 
 const emptyServico: Omit<Servico, 'id'> = { titulo: '', descricao: '', icone: 'Zap', ativo: true, ordem: 0 }
 
@@ -79,8 +108,31 @@ export default function AdminServicos() {
                 <input value={form.titulo} onChange={e => setForm(p => ({ ...p, titulo: e.target.value }))} className="input-dark" placeholder="Nome do serviço" />
               </div>
               <div>
-                <label className="block text-gray-400 font-body text-xs uppercase tracking-wider mb-1.5">Ícone (Lucide)</label>
-                <input value={form.icone} onChange={e => setForm(p => ({ ...p, icone: e.target.value }))} className="input-dark" placeholder="Ex: Zap, Settings..." />
+                <label className="block text-gray-400 font-body text-xs uppercase tracking-wider mb-1.5">Ícone</label>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-lg bg-primary-500/20 border border-primary-500/40 flex items-center justify-center shrink-0">
+                    <DynamicIcon name={form.icone} size={20} className="text-primary-400" />
+                  </div>
+                  <span className="text-gray-300 text-sm font-body">{ICON_OPTIONS.find(i => i.name === form.icone)?.label ?? form.icone}</span>
+                </div>
+                <div className="grid grid-cols-6 gap-1.5">
+                  {ICON_OPTIONS.map(opt => (
+                    <button
+                      key={opt.name}
+                      type="button"
+                      title={opt.label}
+                      onClick={() => setForm(p => ({ ...p, icone: opt.name }))}
+                      className={`flex flex-col items-center gap-1 p-2 rounded-lg border transition-all ${
+                        form.icone === opt.name
+                          ? 'border-primary-500 bg-primary-500/20 text-primary-400'
+                          : 'border-dark-500 bg-dark-600 text-gray-400 hover:border-dark-400 hover:text-gray-200'
+                      }`}
+                    >
+                      <DynamicIcon name={opt.name} size={18} />
+                      <span className="text-[9px] leading-tight text-center truncate w-full">{opt.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
             <div>
@@ -119,6 +171,9 @@ export default function AdminServicos() {
             {servicos.map(s => (
               <div key={s.id} className="p-4 flex items-start gap-4">
                 <GripVertical size={16} className="text-dark-400 mt-1 cursor-grab shrink-0" />
+                <div className="w-9 h-9 rounded-lg bg-primary-500/10 border border-primary-500/20 flex items-center justify-center shrink-0">
+                  <DynamicIcon name={s.icone} size={16} className="text-primary-400" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-1">
                     <span className="font-display font-semibold text-white text-sm uppercase tracking-wide">{s.titulo}</span>
