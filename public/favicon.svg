@@ -5,8 +5,8 @@
       <stop offset="100%" stop-color="#0f0f18"/>
     </linearGradient>
     <linearGradient id="bolt" x1="10" y1="2" x2="22" y2="30" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#facc15"/>
     </linearGradient>
   </defs>
   <!-- Fundo arredondado -->
