@@ -10,6 +10,9 @@ import {
   Camera,
   X,
   Image,
+  Copy,
+  Check,
+  Receipt,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { supabase } from "../../lib/supabase";
@@ -120,6 +123,95 @@ function emptyForm(): Omit<
     observacoes: "",
     notas_internas: "",
   };
+}
+
+// ─── NFeCard ──────────────────────────────────────────────────────────────────
+
+function CopyField({ label, value }: { label: string; value: string }) {
+  const [copied, setCopied] = useState(false)
+  function copy() {
+    navigator.clipboard.writeText(value).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+  return (
+    <div className="flex items-start justify-between gap-3 py-2.5 border-b border-dark-600 last:border-0">
+      <div className="flex-1 min-w-0">
+        <div className="text-gray-500 font-body text-xs uppercase tracking-wider mb-0.5">{label}</div>
+        <div className="text-gray-200 font-body text-sm break-words">{value || '—'}</div>
+      </div>
+      <button
+        onClick={copy}
+        title="Copiar"
+        className="mt-1 shrink-0 text-gray-500 hover:text-primary-400 transition-colors"
+      >
+        {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
+      </button>
+    </div>
+  )
+}
+
+function NFeCard({ orc, itens }: {
+  orc: ReturnType<typeof emptyForm> & { numero: number }
+  itens: ItemLocal[]
+}) {
+  const [allCopied, setAllCopied] = useState(false)
+
+  const discriminacao = [
+    orc.tipo_servico,
+    orc.descricao_servico,
+    ...itens.filter(i => i.descricao.trim()).map(i =>
+      `- ${i.descricao} (${i.quantidade} ${i.unidade} × ${formatBRL(i.valor_unitario)})`
+    ),
+  ].filter(Boolean).join('\n')
+
+  const endereco = [orc.cliente_endereco, orc.cliente_cidade, orc.cliente_estado].filter(Boolean).join(', ')
+
+  const tudo = [
+    `Nº Orçamento: #${String(orc.numero).padStart(4, '0')}`,
+    `Data de Emissão: ${orc.data_emissao ? new Date(orc.data_emissao + 'T00:00:00').toLocaleDateString('pt-BR') : ''}`,
+    `Tomador: ${orc.cliente_nome}`,
+    `CPF/CNPJ: ${orc.cliente_cpf_cnpj || 'Não informado'}`,
+    `Endereço: ${endereco || 'Não informado'}`,
+    `Discriminação dos Serviços:\n${discriminacao}`,
+    `Valor Total: ${formatBRL(orc.total)}`,
+    `Condições de Pagamento: ${orc.condicoes_pagamento}`,
+  ].join('\n\n')
+
+  function copyAll() {
+    navigator.clipboard.writeText(tudo).then(() => {
+      setAllCopied(true)
+      setTimeout(() => setAllCopied(false), 2500)
+    })
+  }
+
+  return (
+    <div className="card-dark p-6 border-l-2 border-yellow-500/50">
+      <div className="flex items-center justify-between pb-3 border-b border-dark-500 mb-1">
+        <h2 className="font-display font-semibold text-yellow-400 uppercase tracking-wider text-sm flex items-center gap-2">
+          <Receipt size={15} />
+          Dados para Nota Fiscal
+        </h2>
+        <button
+          onClick={copyAll}
+          className="flex items-center gap-1.5 text-xs font-body text-gray-400 hover:text-yellow-400 transition-colors border border-dark-400 hover:border-yellow-500/50 px-3 py-1.5 rounded-lg"
+        >
+          {allCopied ? <><Check size={12} className="text-green-400" /> Copiado!</> : <><Copy size={12} /> Copiar tudo</>}
+        </button>
+      </div>
+      <p className="text-gray-600 font-body text-xs mb-4">Visível apenas aqui no painel — não aparece no PDF do cliente.</p>
+
+      <CopyField label="Nº do Orçamento (referência)" value={`#${String(orc.numero).padStart(4, '0')}`} />
+      <CopyField label="Data de Emissão" value={orc.data_emissao ? new Date(orc.data_emissao + 'T00:00:00').toLocaleDateString('pt-BR') : ''} />
+      <CopyField label="Tomador (Nome / Razão Social)" value={orc.cliente_nome} />
+      <CopyField label="CPF / CNPJ do Tomador" value={orc.cliente_cpf_cnpj} />
+      <CopyField label="Endereço do Tomador" value={endereco} />
+      <CopyField label="Discriminação dos Serviços" value={discriminacao} />
+      <CopyField label="Valor Total dos Serviços" value={formatBRL(orc.total)} />
+      <CopyField label="Condições de Pagamento" value={orc.condicoes_pagamento} />
+    </div>
+  )
 }
 
 // ─── sub-componentes ──────────────────────────────────────────────────────────
@@ -923,6 +1015,9 @@ export default function AdminOrcamentoForm() {
             className="input-dark resize-none"
           />
         </div>
+
+        {/* ── Dados para NF-e (somente admin, não aparece no PDF) ─────────── */}
+        {isEdit && <NFeCard orc={{ ...form, numero: numero ?? 0 }} itens={itens} />}
 
         {/* ── Ações finais ─────────────────────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row gap-3 justify-end pb-4">

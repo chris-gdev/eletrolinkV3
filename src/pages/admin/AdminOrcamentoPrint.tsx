@@ -308,26 +308,6 @@ export default function AdminOrcamentoPrint() {
           </div>
         </div>
 
-        {/* ── DADOS PARA NOTA FISCAL (referência) ──────────────────────────── */}
-        <div style={{ borderTop: '2px dashed #d1d5db', paddingTop: 24, marginTop: 8 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 14, textAlign: 'center' }}>
-            ▪ Dados de Referência para Emissão de Nota Fiscal ▪
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 11, color: '#374151' }}>
-            <Row label="Tomador" value={orc.cliente_nome} />
-            <Row label="CPF / CNPJ do Tomador" value={orc.cliente_cpf_cnpj || 'Não informado'} />
-            <Row label="Endereço do Tomador" value={[orc.cliente_endereco, orc.cliente_cidade, orc.cliente_estado].filter(Boolean).join(', ') || 'Não informado'} />
-            <Row label="Data de Emissão" value={formatDate(orc.data_emissao)} />
-            <Row label="Discriminação dos Serviços" value={orc.tipo_servico + (orc.descricao_servico ? ' — ' + orc.descricao_servico : '')} />
-            <Row label="Valor Total dos Serviços" value={formatBRL(orc.total)} />
-            <Row label="Condições de Pagamento" value={orc.condicoes_pagamento} />
-            <Row label="Nº do Orçamento (referência)" value={`#${formatNumero(orc.numero)}`} />
-          </div>
-          <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 12, textAlign: 'center' }}>
-            Esta seção é apenas uma referência interna. A Nota Fiscal deve ser emitida no portal gov.br / prefeitura municipal.
-          </div>
-        </div>
-
         {/* Rodapé */}
         <div style={{ marginTop: 32, textAlign: 'center', fontSize: 10, color: '#9ca3af', borderTop: '1px solid #f3f4f6', paddingTop: 14 }}>
           {config.nome_empresa} · {config.telefone} · {config.email}
