@@ -27,6 +27,7 @@ export interface Depoimento {
   avaliacao: number
   servico: string
   ativo: boolean
+  ordem: number
   created_at: string
 }
 
