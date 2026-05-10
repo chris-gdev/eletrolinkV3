@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { Plus, Trash2, Save, Printer, ArrowLeft, ChevronDown, Camera, X, Image } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { supabase } from '../../lib/supabase'
@@ -95,10 +95,14 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 export default function AdminOrcamentoForm() {
   const { id } = useParams<{ id?: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const isEdit = Boolean(id)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const [form, setForm] = useState(emptyForm())
+  const [form, setForm] = useState(() => {
+    const prefill = location.state as Partial<ReturnType<typeof emptyForm>> | null
+    return prefill ? { ...emptyForm(), ...prefill } : emptyForm()
+  })
   const [itens, setItens] = useState<ItemLocal[]>([newItem()])
   const [numero, setNumero] = useState<number | null>(null)
   const [fotosExistentes, setFotosExistentes] = useState<FotoExistente[]>([])

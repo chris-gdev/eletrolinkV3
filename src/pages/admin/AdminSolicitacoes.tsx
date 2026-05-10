@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Search, Filter, Eye, Trash2, AlertTriangle, ChevronDown, Save } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Search, Filter, Eye, Trash2, AlertTriangle, ChevronDown, Save, FilePlus } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { supabase } from '../../lib/supabase'
 import { OrcamentoRequest, StatusOrcamento } from '../../types'
@@ -13,6 +14,7 @@ const statusConfig: Record<StatusOrcamento, { label: string; color: string }> = 
 }
 
 export default function AdminSolicitacoes() {
+  const navigate = useNavigate()
   const [orcamentos, setOrcamentos] = useState<OrcamentoRequest[]>([])
   const [filtered, setFiltered] = useState<OrcamentoRequest[]>([])
   const [loading, setLoading] = useState(true)
@@ -63,6 +65,19 @@ export default function AdminSolicitacoes() {
     setOrcamentos(prev => prev.map(o => o.id === id ? { ...o, status } : o))
     if (selected?.id === id) setSelected(prev => prev ? { ...prev, status } : prev)
     toast.success('Status atualizado.')
+  }
+
+  function criarOrcamento(o: OrcamentoRequest) {
+    navigate('/admin/orcamentos/novo', {
+      state: {
+        cliente_nome: o.nome,
+        cliente_telefone: o.telefone,
+        cliente_email: o.email,
+        cliente_endereco: o.endereco || '',
+        tipo_servico: o.tipo_servico,
+        descricao_servico: o.descricao,
+      },
+    })
   }
 
   async function deleteOrcamento(id: string) {
@@ -172,6 +187,14 @@ export default function AdminSolicitacoes() {
               <h2 className="font-display font-semibold text-white uppercase tracking-wider text-sm">Detalhes</h2>
               <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-white transition-colors text-xs font-body">Fechar ×</button>
             </div>
+
+            <button
+              onClick={() => criarOrcamento(selected)}
+              className="btn-primary w-full flex items-center justify-center gap-2 text-sm py-2.5 mb-6"
+            >
+              <FilePlus size={15} />
+              Criar Orçamento com estes dados
+            </button>
             <div className="space-y-4">
               {[
                 ['Nome', selected.nome],
