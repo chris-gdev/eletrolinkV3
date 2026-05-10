@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash2, GripVertical, Check, X } from 'lucide-react'
 import * as Icons from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { Servico } from '../../types'
+import RichTextEditor from '../../components/admin/RichTextEditor'
 
 const ICON_OPTIONS = [
   { name: 'Zap', label: 'Elétrica' },
@@ -137,7 +138,7 @@ export default function AdminServicos() {
             </div>
             <div>
               <label className="block text-gray-400 font-body text-xs uppercase tracking-wider mb-1.5">Descrição *</label>
-              <textarea value={form.descricao} onChange={e => setForm(p => ({ ...p, descricao: e.target.value }))} rows={3} className="input-dark resize-none" placeholder="Descrição do serviço..." />
+              <RichTextEditor value={form.descricao} onChange={val => setForm(p => ({ ...p, descricao: val }))} />
             </div>
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-2 cursor-pointer">

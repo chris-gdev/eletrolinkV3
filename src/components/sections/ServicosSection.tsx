@@ -68,7 +68,7 @@ export default function ServicosSection() {
               </div>
 
               <h3 className="font-bold text-xl text-gray-900 mb-2">{servico.titulo}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed mb-4">{servico.descricao}</p>
+              <div className="text-gray-500 text-sm leading-relaxed mb-4 prose prose-sm prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: servico.descricao }} />
 
               <ul className="space-y-1.5 mb-6 flex-1">
                 {(servico.itens || []).map(item => (
